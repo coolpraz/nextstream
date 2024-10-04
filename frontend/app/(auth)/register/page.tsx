@@ -1,36 +1,47 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import React from "react";
+import RegisterForm from "@/components/auth/RegisterForm";
+import AuthCard from "@/components/AuthCard";
 import Link from "next/link";
 
 const RegisterPage = () => {
     return (
-        <form>
-            <div className="grid items-center w-full gap-4">
-                <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="name">Name</Label>
-                    <Input name="name" id="name" autoFocus />
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="email">Email</Label>
-                    <Input name="email" type="email" id="email" />
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="password">Password</Label>
-                    <Input name="password" type="password" id="password" />
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="passwordConfirmation">Confirm Password</Label>
-                    <Input name="passwordConfirmation" type="password" id="passwordConfirmation" />
-                </div>
-                <div className="flex items-center justify-end mt-4 space-x-2">
-                    <Link href="/login" className="underline">
-                        Already registered?
+        <AuthCard
+            title="Create an account"
+            description={
+                <>
+                    Enter your email and password to create an account.
+                    <br />
+                    Already have an account?{" "}
+                    <Link
+                        href="/login"
+                        className="underline underline-offset-4 hover:text-primary"
+                    >
+                        Login
                     </Link>
-                    <Button>Register</Button>
-                </div>
+                </>
+            }
+        >
+            <div className="grid gap-6">
+                <RegisterForm />
             </div>
-        </form>
+            <p className="px-8 mt-4 text-sm text-center text-muted-foreground">
+                By creating an account, you agree to our{" "}
+                <a
+                    href="/terms"
+                    className="underline underline-offset-4 hover:text-primary"
+                >
+                    Terms of Service
+                </a>{" "}
+                and{" "}
+                <a
+                    href="/privacy"
+                    className="underline underline-offset-4 hover:text-primary"
+                >
+                    Privacy Policy
+                </a>
+                .
+            </p>
+        </AuthCard>
     );
 };
 

@@ -1,26 +1,30 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import React from "react";
+import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm";
+import Link from "next/link";
 
 const ForgotPage = () => {
     return (
         <>
-            <div className="mb-4 text-sm text-gray-600">
-                Forgot your password? No problem. Just let us know your email
-                address and we will email you a password reset link that will
-                allow you to choose a new one.
+            <div className="flex flex-col mb-2 space-y-2 text-left">
+                <h1 className="font-semibold tracking-tight text-md">
+                    Forgot Password
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                    Enter your registered email and <br /> we will send you a
+                    link to reset your password.
+                </p>
             </div>
-            <form>
-                <div className="grid items-center w-full gap-4">
-                    <div className="flex flex-col space-y-1.5">
-                        <Label htmlFor="email">Email</Label>
-                        <Input name="email" type="email" id="email" />
-                    </div>
-                    <div className="flex items-center justify-end mt-4 space-x-2">
-                        <Button>Email Password Reset Link</Button>
-                    </div>
-                </div>
-            </form>
+            <ForgotPasswordForm />
+            <p className="px-8 mt-4 text-sm text-center text-muted-foreground">
+                Don&apos;t have an account?{" "}
+                <Link
+                    href="/register"
+                    className="underline underline-offset-4 hover:text-primary"
+                >
+                    Register
+                </Link>
+                .
+            </p>
         </>
     );
 };

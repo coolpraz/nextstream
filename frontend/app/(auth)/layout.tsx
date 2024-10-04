@@ -1,5 +1,5 @@
 import ApplicationLogo from "@/components/ApplicationLogo";
-import AuthCard from "@/components/AuthCard";
+import { Card } from "@/components/ui/card";
 import Link from "next/link";
 
 const Layout = ({
@@ -8,17 +8,18 @@ const Layout = ({
     children: React.ReactNode;
 }>) => {
     return (
-        <div>
-            <div className="antialiased text-gray-900">
-                <AuthCard
-                    logo={
-                        <Link href="/">
-                            <ApplicationLogo className="w-20 h-20 text-gray-500 fill-current" />
-                        </Link>
-                    }
+        <div className="container grid flex-col items-center justify-center h-svh bg-primary-foreground lg:max-w-none lg:px-0">
+            <div className="mx-auto flex w-full flex-col justify-center space-y-2 sm:w-[480px] lg:p-8">
+                <Link
+                    href="/"
+                    className="flex items-center justify-center mb-4"
                 >
-                    {children}
-                </AuthCard>
+                    <ApplicationLogo className="text-gray-500 fill-current" width={50} height={50} />
+                    <h1 className="ml-3 text-xl font-medium uppercase">
+                        Nextstream
+                    </h1>
+                </Link>
+                <Card className="p-6">{children}</Card>
             </div>
         </div>
     );

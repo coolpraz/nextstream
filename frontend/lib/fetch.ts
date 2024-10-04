@@ -1,9 +1,12 @@
+import { headers } from "next/headers";
+
 interface FetchOptions {
     path: string;
     method?: RequestMethod;
     formData?: Record<string, any>;
     headers?: Record<string, string>;
     additionalOptions?: RequestInit;
+    tags?: string[];
 }
 
 type RequestMethod = "GET" | "POST" | "PUT" | "DELETE";
@@ -13,8 +16,9 @@ export async function fetchData(options: FetchOptions): Promise<Response> {
         path,
         method = "GET",
         formData = {},
-        headers = {},
+        headers: customHeaders = {},
         additionalOptions = {},
+        tags = [],
     } = options;
 
     const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}${path}`;
@@ -24,9 +28,13 @@ export async function fetchData(options: FetchOptions): Promise<Response> {
         "X-Requested-With": "XMLHttpRequest",
     };
 
+    const headersList = headers();
+    const csrfToken = headersList.get("X-CSRF-Token");
+
     const mergedHeaders: Record<string, string> = {
         ...defaultHeaders,
-        ...headers,
+        ...customHeaders,
+        ...(csrfToken ? { "X-CSRF-Token": csrfToken } : {}),
     };
 
     const requestOptions: RequestInit = {
@@ -53,7 +61,7 @@ export async function fetchData(options: FetchOptions): Promise<Response> {
         }
     }
 
-    const res = await fetch(url, requestOptions);
+    const res = await fetch(url, { ...requestOptions, next: { tags } });
 
     if (res.ok) {
         const data = await res.json();

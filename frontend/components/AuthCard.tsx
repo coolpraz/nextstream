@@ -1,20 +1,23 @@
-import {
-    Card,
-} from "@/components/ui/card";
+import React from "react";
+
+interface AuthCardProps {
+    title: string;
+    description: React.ReactNode;
+    children: React.ReactNode;
+}
 
 const AuthCard = ({
-    logo,
+    title,
+    description,
     children,
-}: Readonly<{
-    logo: React.ReactNode;
-    children: React.ReactNode;
-}>) => (
-    <div className="flex flex-col items-center min-h-screen pt-6 bg-gray-100 sm:justify-center sm:pt-0">
-        <div>{logo}</div>
-        <Card className="w-full px-6 py-6 mt-6 sm:max-w-md">
-            {children}
-        </Card>
-    </div>
+}: AuthCardProps) => (
+    <>
+        <div className="flex flex-col mb-2 space-y-2 text-left">
+            <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+            <p className="text-sm text-muted-foreground">{description}</p>
+        </div>
+        {children}
+    </>
 );
 
 export default AuthCard;
