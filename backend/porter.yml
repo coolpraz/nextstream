@@ -1,8 +1,6 @@
 services:
   - name: geeta-server
     command: php artisan serve
-
-#services:
 #  - name: Queue
 #    command: php artisan horizon
 #    restart:
