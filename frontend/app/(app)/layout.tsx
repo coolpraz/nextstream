@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import LogoutButton from "@/components/LogoutButton";
+import AppShell from "@/components/AppShell";
 import { redirect } from "next/navigation";
 
 const AppLayout = async ({
@@ -14,9 +14,10 @@ const AppLayout = async ({
     }
 
     return (
-        <div>
-            <LogoutButton />
-            {children}
+        <div className="relative h-full overflow-hidden bg-background">
+            <AppShell>
+                {children}
+            </AppShell>
         </div>
     );
 };
