@@ -2,15 +2,16 @@
 
 import { validateAction } from "@/actions/auth";
 import { notFound } from "next/navigation";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, use } from "react";
 
-const ValidateEmail = ({
-    params,
-    searchParams,
-}: {
-    params: { id: string; token: string };
-    searchParams: { expires: string; signature: string };
-}) => {
+const ValidateEmail = (
+    props: {
+        params: Promise<{ id: string; token: string }>;
+        searchParams: Promise<{ expires: string; signature: string }>;
+    }
+) => {
+    const searchParams = use(props.searchParams);
+    const params = use(props.params);
     const [, action] = useActionState(validateAction, null);
 
     const handleValidation = () => {

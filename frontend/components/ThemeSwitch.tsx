@@ -14,16 +14,6 @@ import { useTheme } from "next-themes";
 const ThemeSwitch = () => {
     const { theme, setTheme } = useTheme();
 
-    /* Update theme-color meta tag when theme is updated */
-    // useEffect(() => {
-    //     const themeColor = theme === "dark" ? "#020817" : "#fff";
-    //     const metaThemeColor = document.querySelector<HTMLMetaElement>(
-    //         "meta[name='theme-color']"
-    //     );
-
-    //     metaThemeColor && metaThemeColor.setAttribute("content", themeColor);
-    // }, [theme]);
-
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>

@@ -28,7 +28,7 @@ export async function fetchData(options: FetchOptions): Promise<Response> {
         "X-Requested-With": "XMLHttpRequest",
     };
 
-    const headersList = headers();
+    const headersList = await headers();
     const csrfToken = headersList.get("X-CSRF-Token");
 
     const mergedHeaders: Record<string, string> = {
