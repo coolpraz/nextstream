@@ -3,12 +3,12 @@
 import { loginAction } from "@/actions/auth";
 import { useRouter } from "next/navigation";
 import { useActionState } from "react";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { Checkbox } from "../ui/checkbox";
-import { Button } from "../ui/button";
-import PasswordInput from "./PasswordInput";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import PasswordInput from "@/components/auth/PasswordInput";
 
 const LoginForm = () => {
     const router = useRouter();

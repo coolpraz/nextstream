@@ -1,10 +1,10 @@
 "use client"
 
 import React, { useActionState } from "react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { forgotPasswordAction } from "@/actions/auth";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 const ForgotPasswordForm = () => {
     const initialState: ForgotPasswordInitialState = {

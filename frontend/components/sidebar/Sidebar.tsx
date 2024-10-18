@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { IconChevronsLeft, IconMenu2, IconX } from '@tabler/icons-react';
-import { Layout } from './SidebarLayout';
-import { Button } from '../ui/button';
-import Nav from './Nav';
+import { Layout } from "@/components/DashboardLayout";
+import { Button } from "@/components/ui/button";
+import Nav from "@/components/sidebar/Nav";
 import { cn } from "@/lib/utils";
 import { sidelinks } from "@/data/sidelinks";
 

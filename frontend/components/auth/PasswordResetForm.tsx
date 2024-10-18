@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter, useSearchParams } from "next/navigation";
-import PasswordInput from "./PasswordInput";
+import PasswordInput from "@/components/auth/PasswordInput";
 
 const PasswordResetForm = ({ token }: { token: string }) => {
     const router = useRouter();

@@ -3,10 +3,10 @@
 import { registerAction } from "@/actions/auth";
 import { useRouter } from "next/navigation";
 import { useActionState } from "react";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import PasswordInput from "./PasswordInput";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import PasswordInput from "@/components/auth/PasswordInput";
 
 const RegisterForm = () => {
     const router = useRouter();
