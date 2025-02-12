@@ -1,15 +1,18 @@
 import PasswordResetForm from "@/components/auth/PasswordResetForm";
-import AuthCard from "@/components/AuthCard";
 
-const PasswordResetPage = async (props: { params: Promise<{ token: string }> }) => {
+const PasswordResetPage = async (props: {
+    params: Promise<{ token: string }>;
+}) => {
     const params = await props.params;
     return (
-        <AuthCard
-            title="Reset Password"
-            description="Enter your email and new password below to reset your account"
-        >
+        <>
+            <h1 className="mb-8 text-2xl font-semibold text-center text-white md:text-3xl">
+                Reset Password
+            </h1>
+            <p>Enter your email and new password below to reset your account</p>
+
             <PasswordResetForm token={params.token} />
-        </AuthCard>
+        </>
     );
 };
 

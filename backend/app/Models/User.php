@@ -21,6 +21,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'verification_code',
+        'verification_code_expires_at'
     ];
 
     /**
@@ -44,5 +46,13 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function markEmailAsVerified() {
+        return $this->forceFill([
+            'email_verified_at' => $this->freshTimestamp(),
+            'verification_code' => null, // Clear the code
+            'verification_code_expires_at' => null, // Clear the expiration time
+        ])->save();
     }
 }

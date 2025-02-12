@@ -20,6 +20,10 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): Response
     {
+        // Generate a 6-digit code
+        $verificationCode = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
@@ -30,6 +34,8 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->string('password')),
+            'verification_code' => $verificationCode,
+            'verification_code_expires_at' => now()->addMinutes(30), // Code expires in 30 minutes
         ]);
 
         event(new Registered($user));

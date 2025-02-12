@@ -16,10 +16,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         ->middleware(['throttle:6,1'])
         ->name('verification.send');
 
-    Route::get('/verify-email/{id}/{hash}', VerifyEmailController::class)
-                ->middleware(['signed', 'throttle:6,1'])
-                ->name('verification.verify');
-
+    Route::post('/verify-email', VerifyEmailController::class)
+        ->middleware(['throttle:6,1'])
+        ->name('verification.verify');
 
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 

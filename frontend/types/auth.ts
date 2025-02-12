@@ -48,9 +48,18 @@ type ResetPasswordInitialState = {
     success: boolean;
 };
 
-type VerificationState = {
-    status: string | null;
+type VerifyState = {
     error?: {
-        message?: string | null
-    }
-}
+        message?: string;
+        data?: string;
+    };
+    success?: boolean;
+};
+
+type ResendState = {
+    error?: {
+        message?: string;
+        code?: string;
+    };
+    success?: boolean;
+};

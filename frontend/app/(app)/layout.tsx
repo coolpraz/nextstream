@@ -14,11 +14,9 @@ const AppLayout = async ({
     }
 
     return (
-        <div className="relative h-full overflow-hidden bg-background">
-            <AppShell>
-                {children}
-            </AppShell>
-        </div>
+        <AppShell>
+            {children}
+        </AppShell>
     );
 };
 

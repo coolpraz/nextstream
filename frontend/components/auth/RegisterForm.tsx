@@ -1,12 +1,12 @@
 "use client";
 
 import { registerAction } from "@/actions/auth";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState } from "react";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import PasswordInput from "@/components/auth/PasswordInput";
 
 const RegisterForm = () => {
     const router = useRouter();
@@ -15,65 +15,71 @@ const RegisterForm = () => {
         error: {},
         success: false,
     };
-    const [state, formAction, isPending] = useActionState(
-        registerAction,
-        initialState
-    );
+
+    const [state, formAction, isPending] = useActionState(registerAction, initialState);
 
     if (state.success) {
         router.push("/dashboard");
         return null;
     }
+
     return (
-        <form action={formAction}>
-            <div className="grid gap-2">
-                <div className="space-y-1">
-                    <Label htmlFor="name">Name</Label>
+        <form action={formAction} className="space-y-6">
+            <div className="space-y-4">
+                <div className="relative">
                     <Input
-                        name="name"
                         type="text"
                         id="name"
+                        name="name"
                         defaultValue={state.data?.name || ""}
-                        className={state.error?.data?.name && "border-red-500"}
                         aria-invalid={!!state.error?.data?.name}
                         aria-describedby={
                             state.error?.data?.name ? "name-error" : undefined
                         }
                         placeholder="John Doe"
+                        className={`w-full px-4 py-3 bg-[#2c2c2e]/50 rounded-xl text-white placeholder:text-gray-500 transition-all ${
+                            state.error?.data?.name
+                                ? "border-red-500 focus:ring-red-500 focus:ring-2"
+                                : "border-0 focus:ring-[#4dabf7] focus:ring-2"
+                        }`}
                         required
                         autoFocus
                     />
                     {state.error?.data?.name && (
-                        <p className="text-red-500">{state.error.data.name}</p>
+                        <p className="text-xs text-red-500">
+                            {state.error.data.name}
+                        </p>
                     )}
                 </div>
-                <div className="space-y-1">
-                    <Label htmlFor="email">Email</Label>
+                <div className="relative">
                     <Input
-                        name="email"
                         type="email"
                         id="email"
+                        name="email"
                         defaultValue={state.data?.email || ""}
-                        className={state.error?.data?.email && "border-red-500"}
                         aria-invalid={!!state.error?.data?.email}
                         aria-describedby={
                             state.error?.data?.email ? "email-error" : undefined
                         }
                         placeholder="name@example.com"
+                        className={`w-full px-4 py-3 bg-[#2c2c2e]/50 rounded-xl text-white placeholder:text-gray-500 transition-all ${
+                            state.error?.data?.email
+                                ? "border-red-500 focus:ring-red-500 focus:ring-2"
+                                : "border-0 focus:ring-[#4dabf7] focus:ring-2"
+                        }`}
                         required
                     />
                     {state.error?.data?.email && (
-                        <p className="text-red-500">{state.error.data.email}</p>
+                        <p className="text-xs text-red-500">
+                            {state.error.data.email}
+                        </p>
                     )}
                 </div>
-                <div className="space-y-1">
-                    <Label htmlFor="password">Password</Label>
-                    <PasswordInput
-                        name="password"
+                <div className="relative">
+                    <Input
+                        type="password"
                         id="password"
-                        className={
-                            state.error?.data?.password && "border-red-500"
-                        }
+                        name="password"
                         aria-invalid={!!state.error?.data?.password}
                         aria-describedby={
                             state.error?.data?.password
@@ -81,28 +87,47 @@ const RegisterForm = () => {
                                 : undefined
                         }
                         placeholder="********"
+                        className={`w-full px-4 py-3 bg-[#2c2c2e]/50 rounded-xl text-white placeholder:text-gray-500 transition-all ${
+                            state.error?.data?.password
+                                ? "border-red-500 focus:ring-red-500 focus:ring-2"
+                                : "border-0 focus:ring-[#4dabf7] focus:ring-2"
+                        }`}
                         required
                     />
                     {state.error?.data?.password && (
-                        <p className="text-red-500">
+                        <p className="text-xs text-red-500">
                             {state.error.data.password}
                         </p>
                     )}
                 </div>
-                <div className="space-y-1">
-                    <Label htmlFor="passwordConfirmation">
-                        Confirm Password
-                    </Label>
-                    <PasswordInput
+                <div className="relative">
+                    <Input
+                        type="password"
                         name="passwordConfirmation"
                         id="passwordConfirmation"
                         placeholder="********"
+                        className="w-full px-4 py-3 bg-[#2c2c2e]/50 border-0 rounded-xl text-white placeholder:text-gray-500 focus:ring-2 focus:ring-[#4dabf7] transition-all"
                         required
                     />
                 </div>
-                <Button className="mt-2" disabled={isPending}>
-                    {isPending ? "Register..." : "Register"}
-                </Button>
+            </div>
+
+            <Button
+                type="submit"
+                className="w-full bg-[#4dabf7] hover:bg-[#3b8fd7] text-white font-semibold py-3 rounded-xl transition-colors"
+                disabled={isPending}
+            >
+                {isPending ? "Register..." : "Register"}
+                <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+
+            <div className="text-center">
+                <Link
+                    href="/login"
+                    className="text-sm text-[#4dabf7] hover:text-[#74c0ff] transition-colors"
+                >
+                    Already registered?
+                </Link>
             </div>
         </form>
     );

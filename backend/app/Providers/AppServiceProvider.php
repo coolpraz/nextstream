@@ -36,22 +36,11 @@ class AppServiceProvider extends ServiceProvider
         });
 
         VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
-            $url = URL::temporarySignedRoute(
-                'verification.verify',
-                Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
-                [
-                    'id' => $notifiable->getKey(),
-                    'hash' => sha1($notifiable->getEmailForVerification()),
-                ]
-            );
-
-            $url = Str::replace(env('APP_URL'), env('FRONTEND_URL'), $url);
-
             return (new MailMessage)
-                ->subject(Lang::get('Verify Email Address'))
-                ->line(Lang::get('Please click the button below to verify your email address.'))
-                ->action(Lang::get('Verify Email Address'), $url)
-                ->line(Lang::get('If you did not create an account, no further action is required.'));
+                ->subject(Lang::get('Verify your Nextstream Account email address.'))
+                ->line(Lang::get('You\'ve chosen this email address for your Nextstream Account. To verify this email address belongs to you, enter the code below on the email verification page:'))
+                ->line($notifiable->verification_code)
+                ->line(Lang::get('This code will expire half hours after this email was sent.'));
         });
 
     }

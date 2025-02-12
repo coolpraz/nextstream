@@ -1,14 +1,13 @@
 "use client";
 
-import { loginAction } from "@/actions/auth";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ArrowRight, Loader } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState } from "react";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import PasswordInput from "@/components/auth/PasswordInput";
+import { loginAction } from "@/actions/auth";
 
 const LoginForm = () => {
     const router = useRouter();
@@ -28,22 +27,22 @@ const LoginForm = () => {
     }
 
     return (
-        <form action={formAction}>
-            <div className="grid gap-2">
-                {/* Email field */}
-                <div className="space-y-1">
-                    <Label htmlFor="email">Email</Label>
+        <form action={formAction} className="space-y-6">
+            <div className="space-y-4">
+                <div className="relative">
                     <Input
                         name="email"
                         type="email"
                         id="email"
+                        className={`w-full px-4 py-3 bg-[#2c2c2e]/50 border-0 rounded-xl text-white placeholder:text-gray-500 focus:ring-2 focus:ring-[#4dabf7] transition-all ${
+                            state.error?.data?.email ? "border-red-500" : ""
+                        }`}
                         defaultValue={state.data?.email || ""}
-                        className={state.error?.data?.email && "border-red-500"}
                         aria-invalid={!!state.error?.data?.email}
                         aria-describedby={
                             state.error?.data?.email ? "email-error" : undefined
                         }
-                        placeholder="name@example.com"
+                        placeholder="Email"
                         required
                         autoFocus
                     />
@@ -51,55 +50,69 @@ const LoginForm = () => {
                         <p className="text-red-500">{state.error.data.email}</p>
                     )}
                 </div>
-                {/* Password field */}
-                <div className="space-y-1">
-                    <div className="flex justify-between">
-                        <Label htmlFor="password">Password</Label>
-                        <Link
-                            href="/forgot-password"
-                            className="text-sm font-medium text-muted-foreground hover:opacity-75"
-                        >
-                            Forgot password?
-                        </Link>
-                    </div>
-                    <PasswordInput
+                <div className="relative">
+                    <Input
                         name="password"
                         id="password"
-                        className={
+                        type="password"
+                        className={`w-full px-4 py-3 bg-[#2c2c2e]/50 border-0 rounded-xl text-white placeholder:text-gray-500 focus:ring-2 focus:ring-[#4dabf7] transition-all pr-12 ${
                             state.error?.data?.password && "border-red-500"
-                        }
+                        }`}
                         aria-invalid={!!state.error?.data?.password}
                         aria-describedby={
                             state.error?.data?.password
                                 ? "password-error"
                                 : undefined
                         }
-                        placeholder="********"
-                        required
+                        placeholder="Password"
                     />
-                    {state.error?.data?.password && (
-                        <p className="text-red-500">
-                            {state.error.data.password}
-                        </p>
-                    )}
-                </div>
-                <div className="space-y-1">
-                    <div className="flex space-x-1.5">
-                        <Checkbox id="remember" />
-                        <Label htmlFor="remember">Remember me</Label>
+                    <div className="absolute -translate-y-1/2 right-2 top-1/2">
+                        {isPending ? (
+                            <Loader className="w-5 h-5 text-gray-400 animate-spin" />
+                        ) : (
+                            <Button
+                                size="icon"
+                                variant="ghost"
+                                className="text-gray-400 transition-colors hover:text-white"
+                                type="submit"
+                            >
+                                <ArrowRight className="w-5 h-5" />
+                            </Button>
+                        )}
                     </div>
                 </div>
-                <Button className="mt-2" disabled={isPending}>
-                    {isPending ? "Log in..." : "Log in"}
-                </Button>
+                {state.error?.data?.password && (
+                    <p className="text-red-500">{state.error.data.password}</p>
+                )}
             </div>
-            <div className="mt-4 text-sm text-center text-muted-foreground">
-                Don&apos;t have an account?{" "}
+
+            <div className="flex items-center justify-center">
+                <div className="flex items-center space-x-2">
+                    <Checkbox
+                        id="remember"
+                        className="border-gray-600 data-[state=checked]:bg-[#4dabf7] data-[state=checked]:border-[#4dabf7]"
+                    />
+                    <label
+                        htmlFor="remember"
+                        className="text-sm text-gray-300 cursor-pointer"
+                    >
+                        Keep me signed in
+                    </label>
+                </div>
+            </div>
+
+            <div className="space-y-3 text-center">
+                <Link
+                    href="/forgot-password"
+                    className="block text-sm text-[#4dabf7] hover:text-[#74c0ff] transition-colors"
+                >
+                    Forgot password?
+                </Link>
                 <Link
                     href="/register"
-                    className="underline underline-offset-4 hover:text-primary"
+                    className="block text-sm text-[#4dabf7] hover:text-[#74c0ff] transition-colors"
                 >
-                    Register
+                    Create NextStream Account
                 </Link>
             </div>
         </form>

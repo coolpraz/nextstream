@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 export const loginAction = async (
     prevState: LoginInitialState,
     formData: FormData
-) => {
+): Promise<LoginInitialState> => {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
@@ -29,8 +29,8 @@ export const loginAction = async (
                 message: "",
                 data: {},
             },
-            success: true
-        } as LoginInitialState;
+            success: true,
+        };
     } catch (error: any) {
         return {
             data: {
@@ -43,20 +43,19 @@ export const loginAction = async (
                     "An error occurred during sign in",
                 data: error.cause?.err.data || {},
             },
-            success: false
-        } as LoginInitialState;
+            success: false,
+        };
     }
 };
 
 export const registerAction = async (
-    prevState: RegisterInitialState,
+    prevState: RegisterInitialState | null,
     formData: FormData
-) => {
-    const { name, email, password, passwordConfirmation } = Object.fromEntries(
-        formData.entries()
-    );
-
+): Promise<RegisterInitialState> => {
     try {
+        const { name, email, password, passwordConfirmation } =
+            Object.fromEntries(formData.entries());
+
         const res = await fetchData({
             path: "/register",
             method: "POST",
@@ -76,32 +75,25 @@ export const registerAction = async (
             );
         }
 
-        await signIn("credentials", { email, password, redirect: false });
+        if (res?.status == 200) {
+            await signIn("credentials", { email, password, redirect: false });
+        }
 
         return {
-            data: {},
-            error: {
-                message: "",
-                data: {},
-            },
-            success: true
-        } as RegisterInitialState;
+            success: true,
+        };
     } catch (error: any) {
         return {
             data: {
-                name,
-                email,
-                password: "",
-                passwordConfirmation: "",
+                name: formData.get("name") as string,
+                email: formData.get("email") as string,
             },
             error: {
-                message:
-                    error.message ||
-                    "An error occurred during sign in",
+                message: error.message || "An error occurred during sign in",
                 data: error.data || {},
             },
-            success: false
-        } as RegisterInitialState;
+            success: false,
+        };
     }
 };
 
@@ -109,7 +101,7 @@ export const forgotPasswordAction = async (
     prevState: ForgotPasswordInitialState,
     formData: FormData
 ) => {
-    const email = formData.get('email');
+    const email = formData.get("email");
 
     try {
         const res = await fetchData({
@@ -160,7 +152,7 @@ export const resetPasswordAction = async (
                 email,
                 password,
                 password_confirmation: passwordConfirmation,
-                token
+                token,
             },
         });
 
@@ -186,7 +178,7 @@ export const resetPasswordAction = async (
                 email,
                 password: "",
                 passwordConfirmation: "",
-                token
+                token,
             },
             error: {
                 message: error.message || "An error occurred during sign in",
@@ -197,7 +189,7 @@ export const resetPasswordAction = async (
     }
 };
 
-export const sendVerificationEmail = async () => {
+export const sendVerificationEmail = async (): Promise<ResendState> => {
     const session = (await auth()) as CustomSession;
     if (!session?.user) return null;
 
@@ -218,36 +210,40 @@ export const sendVerificationEmail = async () => {
             );
         }
 
-        return {
-            status: "verification-link-sent",
-        } as VerificationState;
+        return { success: true };
     } catch (error: any) {
         return {
-            status: "failed",
+            success: false,
             error: {
-                message: error.message
-            }
-        } as VerificationState;
+                message: error.message,
+            },
+        };
     }
-
 };
 
-export const validateAction = async (
+export const verifyAction = async (
     _prevState: any,
     formData: FormData
-) => {
+): Promise<VerifyState> => {
     const session = (await auth()) as CustomSession;
     if (!session?.user) return null;
 
-    const { id, token, expires, signature } = Object.fromEntries(
-        formData.entries()
-    );
+    const rawData = Object.fromEntries(formData.entries());
 
-    const combinedHash = `${token}?expires=${expires}&signature=${signature}`;
+    const code = [
+        rawData["code-0"],
+        rawData["code-1"],
+        rawData["code-2"],
+        rawData["code-3"],
+        rawData["code-4"],
+        rawData["code-5"],
+    ].join("");
 
     try {
         const res = await fetchData({
-            path: `/verify-email/${id}/${combinedHash}`,
+            path: "/verify-email",
+            method: "POST",
+            formData: { code },
             headers: {
                 Authorization: `Bearer ${session.user.token}`,
             },
@@ -257,7 +253,7 @@ export const validateAction = async (
             const errorMessage = await res.json();
             throw new CustomError(
                 errorMessage.message || "An error occurred",
-                errorMessage?.errors
+                errorMessage?.error
             );
         }
 
@@ -265,9 +261,15 @@ export const validateAction = async (
         await unstable_update({
             ...session.user,
             needsVerification: false,
-        } as Partial<CustomSession>);
+        });
     } catch (error: any) {
-        console.log(error.message);
+        return {
+            error: {
+                message: error.message || "An error occurred during sign in",
+                data: error.data || {},
+            },
+            success: false,
+        };
     }
 
     // Revalidate the dashboard page and redirect outside of try-catch
